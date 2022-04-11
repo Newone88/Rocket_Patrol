@@ -7,3 +7,7 @@ let config = {
 
 
 let game = new Phaser.Game(config);
+
+// Set UI size
+let borderUISize = game.config.height / 15;
+let borderPadding = borderUISize/3;
