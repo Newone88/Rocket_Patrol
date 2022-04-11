@@ -36,4 +36,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.y = game.config.height - borderUISize - borderPadding;
         }
     }
+    //Resets Rocket's Starting position
+    reset() {
+        this.isFiring = false;
+        this.y = game.config.height - borderUISize - borderPadding;
+    }
 }
