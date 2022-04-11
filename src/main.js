@@ -5,8 +5,10 @@ let config = {
     scene: [ Menu, Play ]
 }
 
-
 let game = new Phaser.Game(config);
+
+//Reserve KeyBindings for Rocket Controls
+let keyF, keyR, keyLEFT, keyRIGHT;
 
 // Set UI size
 let borderUISize = game.config.height / 15;
