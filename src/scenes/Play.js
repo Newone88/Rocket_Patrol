@@ -3,6 +3,7 @@ class Play extends Phaser.Scene{
         super("PlayScene");
     }
     preload() {
+        //Load Images
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
@@ -57,14 +58,30 @@ class Play extends Phaser.Scene{
             fixedWidth: 100
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        
+        //GAME OVER Flags
+        this.gameOver = false;
+        //60 Second Play Clock       
+        scoreConfig.fixedWidth = 0;
+        this.clock - this.time.delayedCall(60000, () => {
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0,5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart',scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }, null, this);
     }
 
     update() {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)){
+            this.scene.restart();
+        }
+
         this.starfield.tilePositionX -= 4;
-        this.p1Rocket.update();             //Updates Position of Rocket
-        this.ship01.update();               //Updates Spaceship 1
-        this.ship02.update();               //Updates Spaceship 2
-        this.ship03.update();               //Updates Spaceship 3
+        if(!this.gameOver){
+            this.p1Rocket.update();             //Updates Position of Rocket
+            this.ship01.update();               //Updates Spaceship 1
+            this.ship02.update();               //Updates Spaceship 2
+            this.ship03.update();               //Updates Spaceship 3
+        }
 
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
@@ -78,6 +95,8 @@ class Play extends Phaser.Scene{
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+        
+       
     }
 
     //Collision Check for Rocket and Spaceship
@@ -108,6 +127,7 @@ class Play extends Phaser.Scene{
         //Add Score and Update
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+        this.sound.play('sfx_explosion');
     }
 
    
